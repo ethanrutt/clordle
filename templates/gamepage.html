@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <title>CLORDLE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script></script>
+</head>
+<body>
+<center>
+    <h1 class="toptitle">CLORDLE {{game_dict.word}}</h1>
+    <form action="/game/guess" method="POST">
+    <table border="0" width="50%" height="150px" cellspacing="50px">
+        {% for attempt in game_dict.attempts %}
+        <tr>
+            {% for i in range(5) %}
+            <td class="correct-{{ attempt.correctness[i] }}">{{ attempt.guess[i] }}</td>
+            {% endfor %}
+        </tr> 
+        {% endfor %}
+        <tr>
+            <td>
+                <input type="string" maxlength="1" name="guess1">
+            </td>
+        </tr>  
+    </table>
+    <input type="submit" value="Guess">
+    </form>
+</center>
+</body>
+</html>

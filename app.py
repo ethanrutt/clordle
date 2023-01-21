@@ -1,7 +1,7 @@
 import json
 import re
 from spellchecker import SpellChecker
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from random import randint
 
 app = Flask(__name__)
@@ -30,15 +30,29 @@ def check_word(word):
     else:
         return False
 
+@app.route("/test")
+def test():
+    return render_template("gamepage.html")
+
 @app.route("/game")
 def game():
     word_index = randint(0, len(WORDS)-1) # gets random word from WORDS
     game_dict = {'word' : word_index,
-                 'attempts' : []}
+                 'attempts' : [
+                    {
+                        "guess": "CHECK",
+                        "correctness": "RYGYR"
+                    },
+                    {
+                        "guess": "TOTAL",
+                        "correctness": "YYGYY"
+                    }
+                 ]}
     
-    return jsonify(game_dict)
+    #return jsonify(game_dict)
+    return render_template("gamepage.html", game_dict=game_dict)
 
-@app.route("/game/guess", methods = ['PUT'])
+@app.route("/game/guess", methods = ['POST'])
 def guess():
     """ This will do the guess function by updating the game_dict dictionary
         will extract the guess, append a correctness key to the current guess
@@ -57,7 +71,7 @@ def guess():
                     }
                 ]
             }
-        and the guess function will send this back
+        and the guess function will send this back to client
             {
                 "word" : 0,
                 "attempts" :
