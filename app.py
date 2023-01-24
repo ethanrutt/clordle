@@ -30,30 +30,7 @@ def check_word(word):
     else:
         return False
 
-@app.route("/test")
-def test():
-    return render_template("gamepage.html")
-
-@app.route("/game")
-def game():
-    word_index = randint(0, len(WORDS)-1) # gets random word from WORDS
-    game_dict = {'word' : word_index,
-                 'attempts' : [
-                    {
-                        "guess": "CHECK",
-                        "correctness": "RYGYR"
-                    },
-                    {
-                        "guess": "TOTAL",
-                        "correctness": "YYGYY"
-                    }
-                 ]}
-    
-    #return jsonify(game_dict)
-    return render_template("gamepage.html", game_dict=game_dict)
-
-@app.route("/game/guess", methods = ['POST'])
-def guess():
+def guess(data):
     """ This will do the guess function by updating the game_dict dictionary
         will extract the guess, append a correctness key to the current guess
         that will consist of a string of the form RGY
@@ -88,7 +65,7 @@ def guess():
     # Parse Data
     ##########################################################################################
 
-    game_dict = json.loads(request.data) # gets data and puts into dictionary
+    game_dict = data # gets data and puts into dictionary #FIXME potentially take out json.loads
     #g = request.get_json() #FIXME do I want application/JSON only in header or do I want to accept all text?
     correct_word = WORDS[game_dict.get("word")] 
     correct_word_list = [x for x in correct_word]
@@ -98,7 +75,7 @@ def guess():
         raise Exception("Attempts list failed to create a guess and the size is below 1")
 
     curr_guess_dict = temp_attempts_list[len(temp_attempts_list) - 1]
-    curr_guess_word = curr_guess_dict.get("guess")
+    curr_guess_word = curr_guess_dict.get("guess") #FIXME make sure words are capitalized
     curr_guess_word_list = [x for x in curr_guess_word] # each element is letter in word
 
     if (not check_word(curr_guess_word)): # checks if word is a real word
@@ -143,11 +120,47 @@ def guess():
 
     # check correctness
     if (correctness_list == "GGGGG"):
-        return "Correct Guess"
+        return render_template("succeeded.html")
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):
-        return "Attempt Limit Reached"
+        return render_template("failed.html")
     
     # back to json and return
-    return jsonify(game_dict)
+    return game_dict
+
+@app.route("/test")
+def test():
+    return render_template("gamepage.html")
+
+@app.route("/game")
+def game():
+    word_index = randint(0, len(WORDS)-1) # gets random word from WORDS
+    game_dict = {'word' : word_index,
+                 'attempts' : []
+                 }
+    
+    #return jsonify(game_dict)
+    return render_template("gamepage.html", game_dict=game_dict)
+
+@app.route("/game/guess_html", methods = ['POST'])
+def doGuess():
+    print("request.forms:", request.form)
+    # FIXME
+    # .join guess1-5, let's call it guess_word
+    # pull game_json, convert to python dict
+    new_guess_list = []
+    for key, val in request.form.items():
+        if (key.startswith("game_json")):
+            print(val)
+            data = json.loads(val)
+        if (key.startswith("guess")):
+            new_guess_list.append(val)
+        
+    new_word = ''.join(new_guess_list)
+    attempts_list = data.get("attempts")
+    attempts_list.append({"guess" : new_word})
+    # add guess_word to python dict of game_json, let's call it data
+    # call guess on data
+    game_dict = guess(data)
+    return render_template("gamepage.html", game_dict=game_dict)
