@@ -124,7 +124,7 @@ def guess(data):
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):
-        return render_template("failed.html")
+        return render_template("failed.html", correct_word=correct_word)
     
     # back to json and return
     return game_dict
