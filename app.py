@@ -69,10 +69,9 @@ def guess(data):
     temp_attempts_list = game_dict.get("attempts")
 
     if (len(temp_attempts_list) < 1):
-        raise Exception("Attempts list failed to create a guess and the size is below 1")
+        raise SystemError("Attempts list failed to create a guess and the size is below 1")
 
     correct_word = WORDS[game_dict.get("word")]
-    print(correct_word) # FIXME
     correct_word_list = [x for x in correct_word]
 
     curr_guess_dict = temp_attempts_list[len(temp_attempts_list) - 1]
@@ -80,10 +79,10 @@ def guess(data):
     curr_guess_word_list = [x for x in curr_guess_word] # each element is letter in word
 
     if (not check_word(curr_guess_word)): # checks if word is a real word
-        raise Exception("Guess word must be a real word")
+        raise ValueError("Guess word must be a real word")
 
     if (len(curr_guess_word_list) != 5):
-        raise Exception("Guess word is not of length 5")
+        raise IndexError("Guess word is not of length 5")
 
     ##########################################################################################
     # Check Guess
@@ -146,23 +145,33 @@ def game():
 
 @app.route("/game/guess_html", methods = ['POST'])
 def doGuess():
-    print("request.forms:", request.form)
-    # FIXME
-    # .join guess1-5, let's call it guess_word
-    # pull game_json, convert to python dict
     new_guess_list = []
+    data = None
+    error = None
     for key, val in request.form.items():
         if (key.startswith("game_json")):
-            print(val)
             data = json.loads(val)
         if (key.startswith("guess")):
             new_guess_list.append(val)
 
+    if (data is None):
+        raise RuntimeError("game data is empty")
+    game_dict = data
+
     new_word = ''.join(new_guess_list)
     attempts_list = data.get("attempts")
     attempts_list.append({"guess" : new_word})
-    # add guess_word to python dict of game_json, let's call it data
-    # call guess on data
-    game_dict = guess(data)
-    return render_template("gamepage.html", game_dict=game_dict)
+
+    try:
+        game_dict = guess(data)
+    except ValueError as e:
+        error = e
+        game_dict['attempts'] = attempts_list[:-1]
+    except IndexError as e:
+        error = e
+        game_dict['attempts'] = attempts_list[:-1]
+    except SystemError as e:
+        return render_template("failed.html")
+
+    return render_template("gamepage.html", game_dict=game_dict, error_message=error)
 

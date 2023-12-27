@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
     <title>CLORDLE</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -11,12 +11,15 @@
     <form action="/game/guess_html" method="POST">
     <input name="game_json" type="hidden" value='{{ game_dict|tojson }}'>
     <table border="0" width="50%" height="150px" cellspacing="50px">
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
         {% for attempt in game_dict.attempts %}
         <tr>
             {% for i in range(5) %}
             <td class="correct-{{ attempt.correctness[i] }}">{{ attempt.guess[i] }}</td>
             {% endfor %}
-        </tr> 
+        </tr>
         {% endfor %}
         <tr>
             <td>
