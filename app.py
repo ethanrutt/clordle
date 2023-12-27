@@ -182,11 +182,11 @@ def guess(data):
 
     # check correctness
     if ("".join(correctness_list) == "GGGGG"):
-        return render_template("succeeded.html")
+        return None
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):
-        return render_template("failed.html", correct_word=correct_word)
+        return correct_word
 
     # back to json and return
     return game_dict
@@ -236,7 +236,13 @@ def doGuess():
     except SystemError as e:
         return render_template("failed.html")
 
-    print(game_dict)
+    if (game_dict == "success"):
+        # i love python able to return strings and dictionaries in same function LOL
+        return render_template("succeeded.html")
+    if (isinstance(game_dict, str)):
+        # python bruh moment fr
+        return render_template("failed.html", correct_word=game_dict)
+
     keyboard_status = update_keyboard(game_dict)
 
     return render_template("gamepage.html", game_dict=game_dict, keyboard_colors=keyboard_status, error_message=error)
