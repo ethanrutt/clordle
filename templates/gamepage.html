@@ -37,10 +37,47 @@
             <td>
                 <input type="string" maxlength="1" name="guess5">
             </td>
-        </tr>  
+        </tr>
     </table>
-    <input type="submit" value="Guess">
+
+    <div class="keyboard">
+        <div class="keyboard-top">
+            <button style="background-color: {{ keyboard_colors['Q'] }}">Q</button>
+            <button style="background-color: {{ keyboard_colors['W'] }}">W</button>
+            <button style="background-color: {{ keyboard_colors['E'] }}">E</button>
+            <button style="background-color: {{ keyboard_colors['R'] }}">R</button>
+            <button style="background-color: {{ keyboard_colors['T'] }}">T</button>
+            <button style="background-color: {{ keyboard_colors['Y'] }}">Y</button>
+            <button style="background-color: {{ keyboard_colors['U'] }}">U</button>
+            <button style="background-color: {{ keyboard_colors['I'] }}">I</button>
+            <button style="background-color: {{ keyboard_colors['O'] }}">O</button>
+            <button style="background-color: {{ keyboard_colors['P'] }}">P</button>
+        </div>
+        <div class="keyboard-mid">
+            <button style="background-color: {{ keyboard_colors['A'] }}">A</button>
+            <button style="background-color: {{ keyboard_colors['S'] }}">S</button>
+            <button style="background-color: {{ keyboard_colors['D'] }}">D</button>
+            <button style="background-color: {{ keyboard_colors['F'] }}">F</button>
+            <button style="background-color: {{ keyboard_colors['G'] }}">G</button>
+            <button style="background-color: {{ keyboard_colors['H'] }}">H</button>
+            <button style="background-color: {{ keyboard_colors['J'] }}">J</button>
+            <button style="background-color: {{ keyboard_colors['K'] }}">K</button>
+            <button style="background-color: {{ keyboard_colors['L'] }}">L</button>
+        </div>
+        <div class="keyboard-bot">
+            <input type="submit" value="GUESS">
+            <button style="background-color: {{ keyboard_colors['Z'] }}">Z</button>
+            <button style="background-color: {{ keyboard_colors['X'] }}">X</button>
+            <button style="background-color: {{ keyboard_colors['C'] }}">C</button>
+            <button style="background-color: {{ keyboard_colors['V'] }}">V</button>
+            <button style="background-color: {{ keyboard_colors['B'] }}">B</button>
+            <button style="background-color: {{ keyboard_colors['N'] }}">N</button>
+            <button style="background-color: {{ keyboard_colors['M'] }}">M</button>
+            <button>BACKSPACE</button>
+        </div>
+    </div>
     </form>
+
 </center>
 </body>
 </html>

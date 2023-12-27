@@ -6,6 +6,10 @@ from random import randint
 
 app = Flask(__name__)
 
+RED_HEX = "#800000"
+YELLOW_HEX = "#FFF000"
+GREEN_HEX = "#228B22"
+
 ##########################################################################################
 # Generate dictionary (is actually a list not a python dictionary) of words
 ##########################################################################################
@@ -29,6 +33,63 @@ def check_word(word):
         return True
     else:
         return False
+
+def update_keyboard(data):
+    """
+    Updates keyboard accepts game_dict and returns dict of all keys on keyboard with
+    their respected color as either "", "R", "Y", or "G"
+    """
+    keyboard_state = {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": "",
+        "E": "",
+        "F": "",
+        "G": "",
+        "H": "",
+        "I": "",
+        "J": "",
+        "K": "",
+        "L": "",
+        "M": "",
+        "N": "",
+        "O": "",
+        "P": "",
+        "Q": "",
+        "R": "",
+        "S": "",
+        "T": "",
+        "U": "",
+        "V": "",
+        "W": "",
+        "X": "",
+        "Y": "",
+        "Z": "",
+    }
+    if (not data.get("attempts")):
+        return keyboard_state
+
+    attempts_list = data.get("attempts")
+    for attempt in attempts_list:
+        guess = attempt.get("guess")
+        correctness = attempt.get("correctness")
+        for i in range(5):
+            if (keyboard_state[guess[i]] == GREEN_HEX):
+                # if something is already green we want to keep it green
+                continue
+            if (keyboard_state[guess[i]] == YELLOW_HEX and correctness[i] != GREEN_HEX):
+                # only want to change when it's green
+                continue
+
+            if (correctness[i] == "R"):
+                keyboard_state[guess[i]] = RED_HEX
+            elif (correctness[i] == "Y"):
+                keyboard_state[guess[i]] = YELLOW_HEX
+            elif (correctness[i] == "G"):
+                keyboard_state[guess[i]] = GREEN_HEX
+
+    return keyboard_state
 
 def guess(data):
     """ This will do the guess function by updating the game_dict dictionary
@@ -72,6 +133,7 @@ def guess(data):
         raise SystemError("Attempts list failed to create a guess and the size is below 1")
 
     correct_word = WORDS[game_dict.get("word")]
+    print(correct_word) # FIXME
     correct_word_list = [x for x in correct_word]
 
     curr_guess_dict = temp_attempts_list[len(temp_attempts_list) - 1]
@@ -140,8 +202,9 @@ def game():
                  'attempts' : []
                  }
 
-    #return jsonify(game_dict)
-    return render_template("gamepage.html", game_dict=game_dict)
+    keyboard_status = update_keyboard(game_dict)
+
+    return render_template("gamepage.html", game_dict=game_dict, keyboard_colors=keyboard_status)
 
 @app.route("/game/guess_html", methods = ['POST'])
 def doGuess():
@@ -173,5 +236,8 @@ def doGuess():
     except SystemError as e:
         return render_template("failed.html")
 
-    return render_template("gamepage.html", game_dict=game_dict, error_message=error)
+    print(game_dict)
+    keyboard_status = update_keyboard(game_dict)
+
+    return render_template("gamepage.html", game_dict=game_dict, keyboard_colors=keyboard_status, error_message=error)
 
