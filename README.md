@@ -20,3 +20,12 @@ My dad helped me with this project and planning it out, the logic and code is al
 * to start the flask server: `python -m flask run`
 
 * debug switch for running the flask server: `python -m flask --debug run`
+
+---
+
+# TODO
+* better form handling on frontend (prob gonna need js for that)
+* make keyboard functional
+* fix buttons so that they don't refresh page
+* style non breaking errors
+* make an error page

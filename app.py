@@ -1,7 +1,7 @@
 import json
 import re
 from spellchecker import SpellChecker
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 from random import randint
 
 app = Flask(__name__)
@@ -198,9 +198,10 @@ def test():
 @app.route("/game")
 def game():
     word_index = randint(0, len(WORDS)-1) # gets random word from WORDS
-    game_dict = {'word' : word_index,
-                 'attempts' : []
-                 }
+    game_dict = {
+        'word' : word_index,
+        'attempts' : []
+    }
 
     keyboard_status = update_keyboard(game_dict)
 
