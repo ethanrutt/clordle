@@ -1,0 +1,23 @@
+.toptitle {
+    font-size: 70px;
+    font-family: 'Trebuchet MS';
+    color: white;
+}
+body {
+    background-color:rgb(34, 33, 33);
+}
+td {
+    background-color: lightgrey;
+    width: 50px;
+    padding: 10px;
+    text-align: center;
+}
+.correct-R {
+    background-color: red;
+}
+.correct-Y {
+    background-color: yellow;
+}
+.correct-G {
+    background-color: green;
+}

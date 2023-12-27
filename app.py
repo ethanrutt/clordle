@@ -1,10 +1,14 @@
 import json
 import re
 from spellchecker import SpellChecker
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from random import randint
 
 app = Flask(__name__)
+
+RED_HEX = "#800000"
+YELLOW_HEX = "#FFF000"
+GREEN_HEX = "#228B22"
 
 ##########################################################################################
 # Generate dictionary (is actually a list not a python dictionary) of words
@@ -22,7 +26,7 @@ for word in spell.word_frequency:
 def check_word(word):
     """
     This checks if a word is a word in the english language according to the spellchecker library
-    function was found at 
+    function was found at
     https://replit.com/talk/ask/How-to-check-if-a-word-is-an-English-word-with-Python/31374
     """
     if (word == spell.correction(word)):
@@ -30,16 +34,64 @@ def check_word(word):
     else:
         return False
 
-@app.route("/game")
-def game():
-    word_index = randint(0, len(WORDS)-1) # gets random word from WORDS
-    game_dict = {'word' : word_index,
-                 'attempts' : []}
-    
-    return jsonify(game_dict)
+def update_keyboard(data):
+    """
+    Updates keyboard accepts game_dict and returns dict of all keys on keyboard with
+    their respected color as either "", "R", "Y", or "G"
+    """
+    keyboard_state = {
+        "A": "",
+        "B": "",
+        "C": "",
+        "D": "",
+        "E": "",
+        "F": "",
+        "G": "",
+        "H": "",
+        "I": "",
+        "J": "",
+        "K": "",
+        "L": "",
+        "M": "",
+        "N": "",
+        "O": "",
+        "P": "",
+        "Q": "",
+        "R": "",
+        "S": "",
+        "T": "",
+        "U": "",
+        "V": "",
+        "W": "",
+        "X": "",
+        "Y": "",
+        "Z": "",
+    }
+    if (not data.get("attempts")):
+        return keyboard_state
 
-@app.route("/game/guess", methods = ['PUT'])
-def guess():
+    attempts_list = data.get("attempts")
+    for attempt in attempts_list:
+        guess = attempt.get("guess")
+        correctness = attempt.get("correctness")
+        for i in range(5):
+            if (keyboard_state[guess[i]] == GREEN_HEX):
+                # if something is already green we want to keep it green
+                continue
+            if (keyboard_state[guess[i]] == YELLOW_HEX and correctness[i] != GREEN_HEX):
+                # only want to change when it's green
+                continue
+
+            if (correctness[i] == "R"):
+                keyboard_state[guess[i]] = RED_HEX
+            elif (correctness[i] == "Y"):
+                keyboard_state[guess[i]] = YELLOW_HEX
+            elif (correctness[i] == "G"):
+                keyboard_state[guess[i]] = GREEN_HEX
+
+    return keyboard_state
+
+def guess(data):
     """ This will do the guess function by updating the game_dict dictionary
         will extract the guess, append a correctness key to the current guess
         that will consist of a string of the form RGY
@@ -50,14 +102,14 @@ def guess():
         On the first guess for example, the game_dict input will look something like this
             {
                 "word" : 0,
-                "attempts" : 
+                "attempts" :
                 [
                     {
                         "guess" : "CHECK"
                     }
                 ]
             }
-        and the guess function will send this back
+        and the guess function will send this back to client
             {
                 "word" : 0,
                 "attempts" :
@@ -74,24 +126,25 @@ def guess():
     # Parse Data
     ##########################################################################################
 
-    game_dict = json.loads(request.data) # gets data and puts into dictionary
-    #g = request.get_json() #FIXME do I want application/JSON only in header or do I want to accept all text?
-    correct_word = WORDS[game_dict.get("word")] 
-    correct_word_list = [x for x in correct_word]
+    game_dict = data # gets data and puts into dictionary
     temp_attempts_list = game_dict.get("attempts")
 
     if (len(temp_attempts_list) < 1):
-        raise Exception("Attempts list failed to create a guess and the size is below 1")
+        raise SystemError("Attempts list failed to create a guess and the size is below 1")
+
+    correct_word = WORDS[game_dict.get("word")]
+    print(correct_word) # FIXME
+    correct_word_list = [x for x in correct_word]
 
     curr_guess_dict = temp_attempts_list[len(temp_attempts_list) - 1]
-    curr_guess_word = curr_guess_dict.get("guess")
+    curr_guess_word = curr_guess_dict.get("guess") #FIXME make sure words are capitalized
     curr_guess_word_list = [x for x in curr_guess_word] # each element is letter in word
 
     if (not check_word(curr_guess_word)): # checks if word is a real word
-        raise Exception("Guess word must be a real word")
+        raise ValueError("Guess word must be a real word")
 
     if (len(curr_guess_word_list) != 5):
-        raise Exception("Guess word is not of length 5")
+        raise IndexError("Guess word is not of length 5")
 
     ##########################################################################################
     # Check Guess
@@ -107,7 +160,7 @@ def guess():
             correctness_list[i] = "G"
         elif (correct_word_list.count(curr_guess_word_list[i]) == 0):
             correctness_list[i] = "R"
-    
+
     # second pass to handle all letters in word but not in correct spot
     for i in range(5):
         try:
@@ -128,12 +181,63 @@ def guess():
     ##########################################################################################
 
     # check correctness
-    if (correctness_list == "GGGGG"):
-        return "Correct Guess"
+    if ("".join(correctness_list) == "GGGGG"):
+        return render_template("succeeded.html")
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):
-        return "Attempt Limit Reached"
-    
+        return render_template("failed.html", correct_word=correct_word)
+
     # back to json and return
-    return jsonify(game_dict)
+    return game_dict
+
+@app.route("/test")
+def test():
+    return render_template("gamepage.html")
+
+@app.route("/game")
+def game():
+    word_index = randint(0, len(WORDS)-1) # gets random word from WORDS
+    game_dict = {'word' : word_index,
+                 'attempts' : []
+                 }
+
+    keyboard_status = update_keyboard(game_dict)
+
+    return render_template("gamepage.html", game_dict=game_dict, keyboard_colors=keyboard_status)
+
+@app.route("/game/guess_html", methods = ['POST'])
+def doGuess():
+    new_guess_list = []
+    data = None
+    error = None
+    for key, val in request.form.items():
+        if (key.startswith("game_json")):
+            data = json.loads(val)
+        if (key.startswith("guess")):
+            new_guess_list.append(val)
+
+    if (data is None):
+        raise RuntimeError("game data is empty")
+    game_dict = data
+
+    new_word = ''.join(new_guess_list)
+    attempts_list = data.get("attempts")
+    attempts_list.append({"guess" : new_word})
+
+    try:
+        game_dict = guess(data)
+    except ValueError as e:
+        error = e
+        game_dict['attempts'] = attempts_list[:-1]
+    except IndexError as e:
+        error = e
+        game_dict['attempts'] = attempts_list[:-1]
+    except SystemError as e:
+        return render_template("failed.html")
+
+    print(game_dict)
+    keyboard_status = update_keyboard(game_dict)
+
+    return render_template("gamepage.html", game_dict=game_dict, keyboard_colors=keyboard_status, error_message=error)
+
