@@ -23,19 +23,19 @@
         {% endfor %}
         <tr>
             <td>
-                <input type="string" maxlength="1" name="guess1">
+                <input class="letter" type="string" maxlength="1" name="guess1">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess2">
+                <input class="letter" type="string" maxlength="1" name="guess2">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess3">
+                <input class="letter" type="string" maxlength="1" name="guess3">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess4">
+                <input class="letter" type="string" maxlength="1" name="guess4">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess5">
+                <input class="letter" type="string" maxlength="1" name="guess5">
             </td>
         </tr>
     </table>
@@ -73,10 +73,27 @@
             <button style="background-color: {{ keyboard_colors['B'] }}">B</button>
             <button style="background-color: {{ keyboard_colors['N'] }}">N</button>
             <button style="background-color: {{ keyboard_colors['M'] }}">M</button>
-            <button>BACKSPACE</button>
+            <button>&lt----</button>
         </div>
     </div>
     </form>
+
+    <div class="how-to-play-header">
+        <h3>How To Play</h3>
+        <div class="how-to-play-container">
+            <div class="how-to-play">
+                <h1>Guess the wordle in 6 tries</h1>
+                <p>Each guess must be a valid 5-letter word</p>
+                <p>The color of the tiles will change to show how close your guess was to the word</p>
+                <p><strong>EXAMPLES</strong></p>
+                <p>If you guessed WEARY and the W was green, then it means that W is in the word and in the correct spot</p>
+                <p>If you guessed WEARY and the E was yellow, then it means that E is in the word but in the wrong spot</p>
+                <p>Red means the letter is not in the word</p>
+            </div>
+        </div>
+    </div>
+
+
 
 </center>
 </body>
