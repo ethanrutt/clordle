@@ -15,7 +15,7 @@ My dad helped me with this project and planning it out, the logic and code is al
 
 * create requirements file: `pip freeze > requirements.txt`
 
-* to install dependencies as a developer: `pip -r requirements.txt`
+* to install dependencies as a developer: `pip install -r requirements.txt`
 
 * to start the flask server: `python -m flask run`
 

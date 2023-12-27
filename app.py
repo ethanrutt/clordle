@@ -22,7 +22,7 @@ for word in spell.word_frequency:
 def check_word(word):
     """
     This checks if a word is a word in the english language according to the spellchecker library
-    function was found at 
+    function was found at
     https://replit.com/talk/ask/How-to-check-if-a-word-is-an-English-word-with-Python/31374
     """
     if (word == spell.correction(word)):
@@ -41,7 +41,7 @@ def guess(data):
         On the first guess for example, the game_dict input will look something like this
             {
                 "word" : 0,
-                "attempts" : 
+                "attempts" :
                 [
                     {
                         "guess" : "CHECK"
@@ -65,14 +65,15 @@ def guess(data):
     # Parse Data
     ##########################################################################################
 
-    game_dict = data # gets data and puts into dictionary #FIXME potentially take out json.loads
-    #g = request.get_json() #FIXME do I want application/JSON only in header or do I want to accept all text?
-    correct_word = WORDS[game_dict.get("word")] 
-    correct_word_list = [x for x in correct_word]
+    game_dict = data # gets data and puts into dictionary
     temp_attempts_list = game_dict.get("attempts")
 
     if (len(temp_attempts_list) < 1):
         raise Exception("Attempts list failed to create a guess and the size is below 1")
+
+    correct_word = WORDS[game_dict.get("word")]
+    print(correct_word) # FIXME
+    correct_word_list = [x for x in correct_word]
 
     curr_guess_dict = temp_attempts_list[len(temp_attempts_list) - 1]
     curr_guess_word = curr_guess_dict.get("guess") #FIXME make sure words are capitalized
@@ -98,7 +99,7 @@ def guess(data):
             correctness_list[i] = "G"
         elif (correct_word_list.count(curr_guess_word_list[i]) == 0):
             correctness_list[i] = "R"
-    
+
     # second pass to handle all letters in word but not in correct spot
     for i in range(5):
         try:
@@ -119,13 +120,13 @@ def guess(data):
     ##########################################################################################
 
     # check correctness
-    if (correctness_list == "GGGGG"):
+    if ("".join(correctness_list) == "GGGGG"):
         return render_template("succeeded.html")
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):
         return render_template("failed.html", correct_word=correct_word)
-    
+
     # back to json and return
     return game_dict
 
@@ -139,7 +140,7 @@ def game():
     game_dict = {'word' : word_index,
                  'attempts' : []
                  }
-    
+
     #return jsonify(game_dict)
     return render_template("gamepage.html", game_dict=game_dict)
 
@@ -156,7 +157,7 @@ def doGuess():
             data = json.loads(val)
         if (key.startswith("guess")):
             new_guess_list.append(val)
-        
+
     new_word = ''.join(new_guess_list)
     attempts_list = data.get("attempts")
     attempts_list.append({"guess" : new_word})
@@ -164,3 +165,4 @@ def doGuess():
     # call guess on data
     game_dict = guess(data)
     return render_template("gamepage.html", game_dict=game_dict)
+
