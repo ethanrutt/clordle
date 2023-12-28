@@ -1,23 +1,86 @@
 .toptitle {
-    font-size: 70px;
+    font-size: 50px;
     font-family: 'Trebuchet MS';
     color: white;
 }
+
+.topline {
+    height: 1px;
+    background-color: white;
+}
+
+.spacer {
+    height: 10px;
+}
+
 body {
-    background-color:rgb(34, 33, 33);
+    background-color:rgb(24, 23, 23);
+    font-family: 'Trebuchet MS';
 }
+
 td {
-    background-color: lightgrey;
-    width: 50px;
-    padding: 10px;
+    width: 20px;
+    height: 20px;
+    border: 0px;
+    font-size: 20px;
     text-align: center;
+    border-radius: 0.25rem;
+    border: 2px inset;
+    border-color: darkgray;
 }
+
 .correct-R {
-    background-color: red;
+    background-color: #800000;
 }
+
 .correct-Y {
-    background-color: yellow;
+    background-color: #FFF000;
 }
+
 .correct-G {
-    background-color: green;
+    background-color: #228B22;
 }
+
+.letter {
+    background-color: lightgrey;
+    width: 145px;
+    height: 60px;
+    border: 0px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.guess-button {
+    height: 70px;
+    width: 70px;
+}
+
+.keyboard-button {
+    margin-bottom: 5px;
+    height: 70px;
+    width: 70px;
+}
+
+.how-to-play-header {
+    color: white;
+}
+
+.how-to-play-container {
+    width: 50%;
+    background-color: black;
+    border-radius: 0.25rem;
+    border: 2px solid;
+    border-color: white;
+    padding: 5px;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.how-to-play-header:hover .how-to-play-container {
+    opacity: 1;
+}
+
+.how-to-play {
+    width: 70%;
+}
+

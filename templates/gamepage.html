@@ -8,6 +8,8 @@
 <body>
 <center>
     <h1 class="toptitle">CLORDLE</h1>
+    <div class="topline"></div>
+    <div class="spacer"></div>
     <form action="/game/guess_html" method="POST">
     <input name="game_json" type="hidden" value='{{ game_dict|tojson }}'>
     <table border="0" width="50%" height="150px" cellspacing="50px">
@@ -17,66 +19,87 @@
         {% for attempt in game_dict.attempts %}
         <tr>
             {% for i in range(5) %}
-            <td class="correct-{{ attempt.correctness[i] }}">{{ attempt.guess[i] }}</td>
+                <td class="correct-{{ attempt.correctness[i] }}">
+                    <p>{{ attempt.guess[i] }}</p>
+                </td>
             {% endfor %}
         </tr>
         {% endfor %}
         <tr>
             <td>
-                <input type="string" maxlength="1" name="guess1">
+                <input class="letter" type="string" maxlength="1" name="guess1">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess2">
+                <input class="letter" type="string" maxlength="1" name="guess2">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess3">
+                <input class="letter" type="string" maxlength="1" name="guess3">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess4">
+                <input class="letter" type="string" maxlength="1" name="guess4">
             </td>
             <td>
-                <input type="string" maxlength="1" name="guess5">
+                <input class="letter" type="string" maxlength="1" name="guess5">
             </td>
         </tr>
     </table>
 
     <div class="keyboard">
         <div class="keyboard-top">
-            <button style="background-color: {{ keyboard_colors['Q'] }}">Q</button>
-            <button style="background-color: {{ keyboard_colors['W'] }}">W</button>
-            <button style="background-color: {{ keyboard_colors['E'] }}">E</button>
-            <button style="background-color: {{ keyboard_colors['R'] }}">R</button>
-            <button style="background-color: {{ keyboard_colors['T'] }}">T</button>
-            <button style="background-color: {{ keyboard_colors['Y'] }}">Y</button>
-            <button style="background-color: {{ keyboard_colors['U'] }}">U</button>
-            <button style="background-color: {{ keyboard_colors['I'] }}">I</button>
-            <button style="background-color: {{ keyboard_colors['O'] }}">O</button>
-            <button style="background-color: {{ keyboard_colors['P'] }}">P</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['Q'] }}">Q</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['W'] }}">W</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['E'] }}">E</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['R'] }}">R</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['T'] }}">T</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['Y'] }}">Y</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['U'] }}">U</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['I'] }}">I</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['O'] }}">O</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['P'] }}">P</button>
         </div>
         <div class="keyboard-mid">
-            <button style="background-color: {{ keyboard_colors['A'] }}">A</button>
-            <button style="background-color: {{ keyboard_colors['S'] }}">S</button>
-            <button style="background-color: {{ keyboard_colors['D'] }}">D</button>
-            <button style="background-color: {{ keyboard_colors['F'] }}">F</button>
-            <button style="background-color: {{ keyboard_colors['G'] }}">G</button>
-            <button style="background-color: {{ keyboard_colors['H'] }}">H</button>
-            <button style="background-color: {{ keyboard_colors['J'] }}">J</button>
-            <button style="background-color: {{ keyboard_colors['K'] }}">K</button>
-            <button style="background-color: {{ keyboard_colors['L'] }}">L</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['A'] }}">A</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['S'] }}">S</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['D'] }}">D</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['F'] }}">F</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['G'] }}">G</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['H'] }}">H</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['J'] }}">J</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['K'] }}">K</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['L'] }}">L</button>
         </div>
         <div class="keyboard-bot">
-            <input type="submit" value="GUESS">
-            <button style="background-color: {{ keyboard_colors['Z'] }}">Z</button>
-            <button style="background-color: {{ keyboard_colors['X'] }}">X</button>
-            <button style="background-color: {{ keyboard_colors['C'] }}">C</button>
-            <button style="background-color: {{ keyboard_colors['V'] }}">V</button>
-            <button style="background-color: {{ keyboard_colors['B'] }}">B</button>
-            <button style="background-color: {{ keyboard_colors['N'] }}">N</button>
-            <button style="background-color: {{ keyboard_colors['M'] }}">M</button>
-            <button>BACKSPACE</button>
+            <input class="keyboard-button" type="submit" value="GUESS">
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['Z'] }}">Z</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['X'] }}">X</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['C'] }}">C</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['V'] }}">V</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['B'] }}">B</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['N'] }}">N</button>
+            <button class="keyboard-button" style="background-color: {{ keyboard_colors['M'] }}">M</button>
+            <button class="keyboard-button">&lt-</button>
         </div>
     </div>
     </form>
+
+    <div class="spacer"></div>
+
+    <div class="how-to-play-header">
+        <h3>How To Play</h3>
+        <div class="how-to-play-container">
+            <div class="how-to-play">
+                <h1>Guess the wordle in 6 tries</h1>
+                <p>Each guess must be a valid 5-letter word</p>
+                <p>The color of the tiles will change to show how close your guess was to the word</p>
+                <p><strong>EXAMPLES</strong></p>
+                <p>If you guessed WEARY and the W was green, then it means that W is in the word and in the correct spot</p>
+                <p>If you guessed WEARY and the E was yellow, then it means that E is in the word but in the wrong spot</p>
+                <p>Red means the letter is not in the word</p>
+            </div>
+        </div>
+    </div>
+
+
 
 </center>
 </body>
