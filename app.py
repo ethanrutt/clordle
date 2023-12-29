@@ -182,7 +182,7 @@ def guess(data):
 
     # check correctness
     if ("".join(correctness_list) == "GGGGG"):
-        return None
+        return "success"
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):

@@ -59,6 +59,9 @@ td {
     margin-bottom: 5px;
     height: 70px;
     width: 70px;
+    opacity: 1;
+    background-color: white;
+    color: black;
 }
 
 .how-to-play-header {
