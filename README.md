@@ -25,3 +25,4 @@ My dad helped me with this project and planning it out, the logic and code is al
 
 # TODO
 * make keyboard functional
+* fix indexer importError bug
