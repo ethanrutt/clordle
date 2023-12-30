@@ -1,7 +1,7 @@
 import json
 import re
 from spellchecker import SpellChecker
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from random import randint
 
 app = Flask(__name__)
@@ -182,7 +182,7 @@ def guess(data):
 
     # check correctness
     if ("".join(correctness_list) == "GGGGG"):
-        return None
+        return "success"
 
     # check attempt limit
     if (len(temp_attempts_list) >= 6):
@@ -191,9 +191,9 @@ def guess(data):
     # back to json and return
     return game_dict
 
-@app.route("/test")
-def test():
-    return render_template("gamepage.html")
+@app.route("/")
+def home():
+    return redirect("/game")
 
 @app.route("/game")
 def game():
@@ -215,6 +215,7 @@ def doGuess():
     for key, val in request.form.items():
         if (key.startswith("game_json")):
             data = json.loads(val)
+
         if (key.startswith("guess")):
             new_guess_list.append(val)
 

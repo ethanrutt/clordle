@@ -18,6 +18,11 @@ body {
     font-family: 'Trebuchet MS';
 }
 
+*:focus {
+    outline: none;
+    caret-color: transparent;
+}
+
 td {
     width: 20px;
     height: 20px;
@@ -59,6 +64,9 @@ td {
     margin-bottom: 5px;
     height: 70px;
     width: 70px;
+    opacity: 1;
+    background-color: white;
+    color: black;
 }
 
 .how-to-play-header {
