@@ -18,6 +18,11 @@ body {
     font-family: 'Trebuchet MS';
 }
 
+*:focus {
+    outline: none;
+    caret-color: transparent;
+}
+
 td {
     width: 20px;
     height: 20px;

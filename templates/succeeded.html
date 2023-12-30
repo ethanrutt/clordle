@@ -2,8 +2,28 @@
 <html lang="en">
     <head>
         <title>CLORDLE</title>
+        <style>
+            #play-again {
+                color: black;
+                border: 2px solid;
+                border-color: black;
+                border-radius: 0.25rem;
+                background-color: lightblue;
+                padding: 10px;
+                text-decoration: none;
+            }
+
+            body {
+                background-color: green;
+                font-size: 50px;
+                font-family: 'Trebuchet MS';
+            }
+        </style>
     </head>
-    <body background="green">
+    <body>
+    <center>
         <h1>CONGRATULATIONS!</h1>
+        <a id="play-again" href="{{ url_for('game')}}">Play again?</a>
+    </center>
     </body>
 </html>
