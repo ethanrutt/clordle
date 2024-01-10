@@ -2,6 +2,7 @@
 
 * This project is one that I started over christmas break of 2022. I wanted to build a wordle clone using flask on the backend and react on the frontend. My dad helped me with this project and planning it out, the logic and code is all written by myself.
 * Check out the game at https://clordle.onrender.com/
+* **Note**: since I'm hosting this for free on render, it takes some time for my server to spin up when you first click on the link.
 
 
 ## Helpful Commands
@@ -26,4 +27,5 @@
 
 # TODO
 * make keyboard functional
-* fix indexer importError bug
+* fix keyboard coloring bug
+* make form focus on first letter at all times so that you don't have to click
