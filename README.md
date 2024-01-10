@@ -1,7 +1,8 @@
 # clordle
 
-This project is one that I started over christmas break of 2022. I wanted to build a wordle clone using flask on the backend and react on the frontend.
-My dad helped me with this project and planning it out, the logic and code is all written by myself.
+* This project is one that I started over christmas break of 2022. I wanted to build a wordle clone using flask on the backend and react on the frontend. My dad helped me with this project and planning it out, the logic and code is all written by myself.
+* Check out the game at https://clordle.onrender.com/
+
 
 ## Helpful Commands
 
