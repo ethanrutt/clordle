@@ -104,7 +104,54 @@
     </div>
 
     <script>
-        document.addEventListener('keydown', function (e) {
+        const getFocusedElement = (elements) => {
+            for (i = 0; i < elements.length; i++) {
+                if (elements[i].value === "" && elements[i].className === "letter") {
+                    return elements[i];
+                }
+            }
+            return "";
+        }
+
+        const handleNormalKeypress = (e, focusedElement, currentIndex, formElements) => {
+            e.preventDefault();
+
+            if (focusedElement.value === '') {
+                focusedElement.value += e.key.toUpperCase();
+            }
+
+            const nextIndex = currentIndex + 1;
+            if (nextIndex >= formElements.length) {
+                return;
+            }
+
+            const nextElement = formElements[nextIndex];
+            nextElement.focus();
+        }
+
+        const handleBackspace = (e, focusedElement, currentIndex, formElements) => {
+            if (focusedElement.tagName === 'INPUT') {
+                if (focusedElement.value === '') {
+                    e.preventDefault();
+
+                    const prevIndex = currentIndex - 1;
+                    if (prevIndex < 0) {
+                        return;
+                    }
+                    const prevElement = formElements[prevIndex];
+
+                    prevElement.focus();
+                    prevElement.value = '';
+                }
+                else {
+                    // current element has a value, so we can just clear the value
+                    e.preventDefault();
+                    focusedElement.value = '';
+                }
+            }
+        }
+
+        const handle_keypress = (e) => {
             if (!e.key.match(/[a-zA-Z]/)) {
                 e.preventDefault();
                 console.log("invalid key");
@@ -112,70 +159,25 @@
             }
 
             const formElements = Array.from(document.getElementById('game-form').elements);
-            focusedElement = ""
-            for (i = 0; i < formElements.length; i++) {
-                console.log("value: ", formElements[i].value)
-                console.log("class: ", formElements[i].className)
-                if (formElements[i].value === "" && formElements[i].className === "letter") {
-                    focusedElement = formElements[i]
-                    break;
-                }
-            }
-
+            focusedElement = getFocusedElement(formElements);
             const currentIndex = formElements.indexOf(focusedElement);
 
             if (e.key.length === 1) {
-                e.preventDefault();
-
-                // Add the key to the input if the input is empty
-                if (focusedElement.value === '') {
-                    focusedElement.value += e.key.toUpperCase();
-                }
-
-                // Find next element unless at end, then do nothing
-                const nextIndex = currentIndex + 1;
-                if (nextIndex >= formElements.length) {
-                    return;
-                }
-                const nextElement = formElements[nextIndex];
-
-                nextElement.focus();
+                handleNormalKeypress(e, focusedElement, currentIndex, formElements);
             } else if (e.key === 'Backspace') {
                 // This means all inputs have a letter in them, so we want to get rid of the final input box
                 if (focusedElement === "") {
-                    document.getElementsByName("guess5")[0].focus()
+                    focusedElement = document.getElementsByName("guess5")[0];
                 }
 
-                if (document.activeElement.tagName === 'INPUT') {
-                    if (document.activeElement.value === '') {
-                        e.preventDefault();
-
-                        // Find the previous form element
-                        const prevIndex = currentIndex - 1;
-                        if (prevIndex < 0) {
-                            return;
-                        }
-                        const prevElement = formElements[prevIndex];
-
-                        // Focus and clear on the previous form element
-                        prevElement.focus();
-                        prevElement.value = '';
-                    }
-                    else {
-                        // current element has a value, so we can just clear the value
-                        e.preventDefault();
-                        const focusedElement = document.activeElement;
-                        focusedElement.value = '';
-                    }
-                }
+                handleBackspace(e, focusedElement, currentIndex, formElements);
             } else if (e.key === 'Enter') {
                 document.getElementById('game-form').submit();
             }
-        });
+        }
+
+        document.addEventListener('keydown', handle_keypress);
     </script>
-
-
-
 </center>
 </body>
 </html>
