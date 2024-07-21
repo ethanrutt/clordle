@@ -104,26 +104,33 @@
     </div>
 
     <script>
-        document.getElementById('game-form').addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function (e) {
             if (!e.key.match(/[a-zA-Z]/)) {
                 e.preventDefault();
                 console.log("invalid key");
                 return;
             }
 
+            const formElements = Array.from(document.getElementById('game-form').elements);
+            focusedElement = ""
+            for (i = 0; i < formElements.length; i++) {
+                console.log("value: ", formElements[i].value)
+                console.log("class: ", formElements[i].className)
+                if (formElements[i].value === "" && formElements[i].className === "letter") {
+                    focusedElement = formElements[i]
+                    break;
+                }
+            }
+
+            const currentIndex = formElements.indexOf(focusedElement);
+
             if (e.key.length === 1) {
                 e.preventDefault();
-
-                const focusedElement = document.activeElement;
 
                 // Add the key to the input if the input is empty
                 if (focusedElement.value === '') {
                     focusedElement.value += e.key.toUpperCase();
                 }
-
-                const formElements = Array.from(document.getElementById('game-form').elements);
-
-                const currentIndex = formElements.indexOf(focusedElement);
 
                 // Find next element unless at end, then do nothing
                 const nextIndex = currentIndex + 1;
@@ -134,13 +141,14 @@
 
                 nextElement.focus();
             } else if (e.key === 'Backspace') {
+                // This means all inputs have a letter in them, so we want to get rid of the final input box
+                if (focusedElement === "") {
+                    document.getElementsByName("guess5")[0].focus()
+                }
+
                 if (document.activeElement.tagName === 'INPUT') {
                     if (document.activeElement.value === '') {
                         e.preventDefault();
-
-                        const focusedElement = document.activeElement;
-                        const formElements = Array.from(document.getElementById('game-form').elements);
-                        const currentIndex = formElements.indexOf(focusedElement);
 
                         // Find the previous form element
                         const prevIndex = currentIndex - 1;
