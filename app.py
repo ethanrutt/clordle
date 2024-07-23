@@ -78,7 +78,7 @@ def update_keyboard(data):
             if (keyboard_state[guess[i]] == GREEN_HEX):
                 # if something is already green we want to keep it green
                 continue
-            if (keyboard_state[guess[i]] == YELLOW_HEX and correctness[i] != GREEN_HEX):
+            if (keyboard_state[guess[i]] == YELLOW_HEX and correctness[i] != "G"):
                 # only want to change when it's green
                 continue
 
