@@ -24,8 +24,3 @@
 * debug switch for running the flask server: `python -m flask --debug run`
 
 ---
-
-# TODO
-* make keyboard functional
-* fix keyboard coloring bug
-* make form focus on first letter at all times so that you don't have to click
